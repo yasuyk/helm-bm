@@ -48,7 +48,7 @@
   :group 'helm-bm)
 
 (defcustom helm-bm-exclude-current-buffer-from-all-buffer-source-p t
-  "If non-nil, show current buffer bookmarks in `helm-source-bm-all-buffers'."
+  "If nil, show current buffer bookmarks in `helm-source-bm-all-buffers'."
   :group 'helm-bm
   :type  'boolean)
 

@@ -4,7 +4,7 @@
 
 ;; Author: Yasuyuki Oka <yasuyk@gmail.com>
 ;; URL: https://github.com/yasuyk/helm-bm
-;; Package-Requires: ((bm "1.0") (cl-lib "0.3") (helm "1.0") (s "1.8.0"))
+;; Package-Requires: ((bm "1.0") (cl-lib "0.3") (helm "1.5.7") (s "1.8.0"))
 ;; Version: 0.1
 ;; Keywords: helm, bookmark
 

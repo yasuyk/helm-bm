@@ -122,9 +122,6 @@
   "Return the name of BUFFER with BM."
   (buffer-name (overlay-buffer bm)))
 
-(defun helm-bm-all-buffers-sort-key (bm)
-  (cons (overlay-start bm) (helm-bm-buffer-name bm)))
-
 (defun helm-bm< (bm1 bm2)
   (let ((bm1-name (helm-bm-buffer-name bm1))
         (bm2-name (helm-bm-buffer-name bm2)))

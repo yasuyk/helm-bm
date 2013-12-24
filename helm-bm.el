@@ -47,18 +47,7 @@
   "Face used for annotation."
   :group 'helm-bm)
 
-(defcustom helm-bm-exclude-current-buffer-from-all-buffer-source-p t
-  "If nil, show current buffer bookmarks in `helm-source-bm-all-buffers'."
-  :group 'helm-bm
-  :type  'boolean)
-
 (defconst helm-bm-action-name-edit-annotation "Edit annotation")
-
-(defvar helm-bm-action-common
-  `(("Switch to buffer" . helm-bm-action-switch-to-buffer)
-    ("Remove(s)" . helm-bm-action-remove-markd-bookmarks)
-    (,helm-bm-action-name-edit-annotation
-     . helm-bm-action-bookmark-edit-annotation)))
 
 (defmacro helm-bm-with-candidate (candidate &rest body)
   "Execute the forms with CANDIDATE in BODY."
@@ -94,7 +83,7 @@
     (forward-line (1- lineno))))
 
 (defun helm-bm-action-remove-markd-bookmarks (candidate)
-  "Remove bookmarks with `helm-marked-candidates'."
+  "Remove bookmarks of not CANDIDATE but `helm-marked-candidates'."
   (mapc 'helm-bm-action-remove-bookmark (helm-marked-candidates)))
 
 (defun helm-bm-action-remove-bookmark (candidate)
@@ -123,11 +112,14 @@
   (buffer-name (overlay-buffer bm)))
 
 (defun helm-bm< (bm1 bm2)
-  (let ((bm1-name (helm-bm-buffer-name bm1))
+  (let ((current-buf (buffer-name (current-buffer)))
+        (bm1-name (helm-bm-buffer-name bm1))
         (bm2-name (helm-bm-buffer-name bm2)))
     (if (string-equal bm1-name bm2-name)
         (< (overlay-start bm1) (overlay-start bm2))
-      (string< bm1-name bm2-name))))
+      (cond ((string-equal current-buf bm1-name) t)
+            ((string-equal current-buf bm1-name) nil)
+            (:else (string< bm1-name bm2-name))))))
 
 (defun helm-bm-candidate-transformer-display
   (bufname lineno content annotation)
@@ -153,59 +145,34 @@
            bufname (int-to-string lineno)
            (buffer-substring-no-properties start (1- end)) annotation))))))
 
-(defvar helm-bm-all-buffers-list-cache nil)
+(defvar helm-bm-list-cache nil)
 
-(defun helm-bm-all-buffers-bookmark-predicate (bm bufname)
-  (or (eq bm nil)
-      (when helm-bm-exclude-current-buffer-from-all-buffer-source-p
-        (string-equal (helm-bm-buffer-name bm) bufname))))
-
-(defun helm-bm-all-buffers-init ()
-  (setq helm-bm-all-buffers-list-cache
+(defun helm-bm-init ()
+  (setq helm-bm-list-cache
         (let ((bms (cl-sort (helm-bm-all-bookmarks) 'helm-bm<))
               (bufname (buffer-name (current-buffer))))
-          (mapcar 'helm-bm-transform-to-candidate
-                  (cl-delete-if
-                   (lambda (bm)
-                     (helm-bm-all-buffers-bookmark-predicate bm bufname))
-                   bms)))))
+          (delq nil (mapcar 'helm-bm-transform-to-candidate bms)))))
 
-(defvar helm-source-bm-all-buffers
-  `((name . "Visible bookmarks in all buffers")
-    (init . helm-bm-all-buffers-init)
+(defvar helm-source-bm
+  `((name . "Visible bookmarks")
+    (init . helm-bm-init)
     (multiline)
     (volatile)
-    (candidates . helm-bm-all-buffers-list-cache)
-    (action . ,(append
-                helm-bm-action-common
-                '(("Remove all bookmarks" .
-                   (lambda (_c) (bm-remove-all-all-buffers))))))))
-
-(defvar helm-bm-current-buffer-list-cache nil)
-
-(defun helm-bm-current-buffer-init ()
-  (setq helm-bm-current-buffer-list-cache
-        (let ((bm-list (bm-lists)))
-          (mapcar 'helm-bm-transform-to-candidate
-                  (cl-sort (append (car bm-list) (cdr bm-list))
-                           '< :key 'overlay-start)))))
-
-(defvar helm-source-bm-current-buffer
-  `((name . "Visible bookmarks in current buffer")
-    (init . helm-bm-current-buffer-init)
-    (multiline)
-    (volatile)
-    (candidates . helm-bm-current-buffer-list-cache)
-    (action . ,(append
-                helm-bm-action-common
-                '(("Remove all bookmarks" .
-                   (lambda (_c) (bm-remove-all-current-buffer))))))))
+    (candidates . helm-bm-list-cache)
+    (action . (("Switch to buffer" . helm-bm-action-switch-to-buffer)
+               ("Remove(s)" . helm-bm-action-remove-markd-bookmarks)
+               (,helm-bm-action-name-edit-annotation
+                . helm-bm-action-bookmark-edit-annotation)
+               ("Remove all bookmarks in current buffer" .
+                (lambda (_c) (bm-remove-all-current-buffer)))
+               ("Remove all bookmarks in all buffers" .
+                (lambda (_c) (bm-remove-all-all-buffers)))))))
 
 ;;;###autoload
 (defun helm-bm ()
   "Show bookmarks of bm.el with `helm'."
   (interactive)
-  (helm :sources '(helm-source-bm-current-buffer helm-source-bm-all-buffers)
+  (helm :sources '(helm-source-bm)
         :buffer "*helm bm*"))
 
 (provide 'helm-bm)

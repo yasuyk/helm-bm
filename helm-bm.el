@@ -1,6 +1,6 @@
 ;;; helm-bm.el --- helm sources for bm.el
 
-;; Copyright (C) 2013 Yasuyuki Oka <yasuyk@gmail.com>
+;; Copyright (C) 2013-2016 Yasuyuki Oka <yasuyk@gmail.com>
 
 ;; Author: Yasuyuki Oka <yasuyk@gmail.com>
 ;; URL: https://github.com/yasuyk/helm-bm

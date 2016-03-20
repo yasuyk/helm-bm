@@ -1,4 +1,4 @@
-# helm-bm.el
+# helm-bm.el [![melpa badge][melpa-badge]][melpa-link] [![melpa stable badge][melpa-stable-badge]][melpa-stable-link]
 
 [helm] sources for [bm.el][bm].
 
@@ -33,3 +33,9 @@ Show bookmarks of [bm].el with `helm`.
 [bm]:https://github.com/joodland/bm
 [cl-lib]:http://elpa.gnu.org/packages/cl-lib.html
 [s]:https://github.com/magnars/s.el
+[travis-badge]: https://travis-ci.org/yasuyk/helm-bm.svg
+[travis-link]: https://travis-ci.org/yasuyk/helm-bm
+[melpa-link]: http://melpa.org/#/helm-bm
+[melpa-stable-link]: http://stable.melpa.org/#/helm-bm
+[melpa-badge]: http://melpa.org/packages/helm-bm-badge.svg
+[melpa-stable-badge]: http://stable.melpa.org/packages/helm-bm-badge.svg

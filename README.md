@@ -1,4 +1,4 @@
-# helm-bm.el [![melpa badge][melpa-badge]][melpa-link] [![melpa stable badge][melpa-stable-badge]][melpa-stable-link]
+# helm-bm.el [![licence][gplv3-badge]][gplv3-link] [![melpa badge][melpa-badge]][melpa-link] [![melpa stable badge][melpa-stable-badge]][melpa-stable-link]
 
 [helm] sources for [bm.el][bm].
 
@@ -39,3 +39,5 @@ Show bookmarks of [bm].el with `helm`.
 [melpa-stable-link]: http://stable.melpa.org/#/helm-bm
 [melpa-badge]: http://melpa.org/packages/helm-bm-badge.svg
 [melpa-stable-badge]: http://stable.melpa.org/packages/helm-bm-badge.svg
+[gplv3-badge]:http://img.shields.io/badge/license-GPLv3-blue.svg
+[gplv3-link]:https://www.gnu.org/copyleft/gpl.html

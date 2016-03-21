@@ -113,6 +113,9 @@
   (buffer-name (overlay-buffer bm)))
 
 (defun helm-bm< (bm1 bm2)
+  "Return t if BM1 is less than BM2 in lexicographic order.
+Case is significant.
+Symbols are also allowed; their print names are used instead."
   (let ((current-buf (buffer-name (current-buffer)))
         (bm1-name (helm-bm-buffer-name bm1))
         (bm2-name (helm-bm-buffer-name bm2)))
@@ -123,7 +126,10 @@
             (:else (string< bm1-name bm2-name))))))
 
 (defun helm-bm-candidate-transformer-display
-  (bufname lineno content annotation)
+    (bufname lineno content annotation)
+  "Return a string displayed in helm buffer.
+
+BUFNAME, LINENO, CONTENT and ANNOTATION are concatenated to the string."
   (format "%s:%s:%s%s"
           (propertize bufname 'face compilation-info-face)
           (propertize lineno 'face compilation-line-face)
@@ -134,6 +140,7 @@
                                 'helm-bm-annotation-face)))))
 
 (defun helm-bm-transform-to-candidate (bm)
+  "Convert a BM to a candicate."
   (let ((current-buf (overlay-buffer bm)))
     (with-current-buffer current-buf
       (let* ((start (overlay-start bm))
@@ -149,6 +156,7 @@
 (defvar helm-bm-list-cache nil)
 
 (defun helm-bm-init ()
+  "Initialize `helm-source-bm'."
   (setq helm-bm-list-cache
         (let ((bms (cl-sort (helm-bm-all-bookmarks) 'helm-bm<))
               (bufname (buffer-name (current-buffer))))

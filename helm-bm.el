@@ -38,6 +38,7 @@
 (require 'cl-lib)
 (require 'helm)
 (require 's)
+(require 'compile) ;; compilation-info-face, compilation-line-face
 
 (defgroup helm-bm nil
   "Bookmarks of bm.el related Applications and libraries for Helm."

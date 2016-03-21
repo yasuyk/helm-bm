@@ -139,8 +139,8 @@ BUFNAME, LINENO, CONTENT and ANNOTATION are concatenated to the string."
                     (propertize annotation 'face
                                 'helm-bm-annotation-face)))))
 
-(defun helm-bm-transform-to-candidate (bm)
-  "Convert a BM to a candicate."
+(defun helm-bm-transform-to-candicate (bm)
+  "Convert a BM to a CANDICATE."
   (let ((current-buf (overlay-buffer bm)))
     (with-current-buffer current-buf
       (let* ((start (overlay-start bm))
@@ -160,7 +160,7 @@ BUFNAME, LINENO, CONTENT and ANNOTATION are concatenated to the string."
   (setq helm-bm-list-cache
         (let ((bms (cl-sort (helm-bm-all-bookmarks) 'helm-bm<))
               (bufname (buffer-name (current-buffer))))
-          (delq nil (mapcar 'helm-bm-transform-to-candidate bms)))))
+          (delq nil (mapcar 'helm-bm-transform-to-candicate bms)))))
 
 (defvar helm-source-bm
   `((name . "Visible bookmarks")
